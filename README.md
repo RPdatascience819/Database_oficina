@@ -13,15 +13,15 @@ O esquema foi projetado para ser normalizado e relacional, garantindo a integrid
 
 * Cliente: Armazena as informações dos proprietários dos veículos.
 
-Veiculo: Contém os detalhes de cada veículo, com uma referência direta ao seu proprietário (Cliente).
+* Veiculo: Contém os detalhes de cada veículo, com uma referência direta ao seu proprietário (Cliente).
 
-Equipe: Define as equipes de trabalho. Foi criada como uma entidade separada para permitir que uma equipe seja composta por vários mecânicos.
+* Equipe: Define as equipes de trabalho. Foi criada como uma entidade separada para permitir que uma equipe seja composta por vários mecânicos.
 
-Mecanico: Cadastro individual de cada mecânico com seus dados e especialidade.
+* Mecanico: Cadastro individual de cada mecânico com seus dados e especialidade.
 
-OrdemServico: A tabela central que conecta Veiculo, Equipe e os detalhes do serviço. Controla o status, datas e valores.
+* OrdemServico: A tabela central que conecta Veiculo, Equipe e os detalhes do serviço. Controla o status, datas e valores.
 
-Servico e Peca: Tabelas de referência (lookup tables) que funcionam como um catálogo de serviços e peças com seus respectivos valores.
+* Servico e Peca: Tabelas de referência (lookup tables) que funcionam como um catálogo de serviços e peças com seus respectivos valores.
 
 # Tabelas Associativas:
 
