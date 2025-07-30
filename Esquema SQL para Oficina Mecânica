@@ -1,0 +1,116 @@
+-- =================================================================
+-- ESQUEMA CONCEITUAL PARA O BANCO DE DADOS DE UMA OFICINA MECÂNICA
+-- =================================================================
+-- Criação do Banco de Dados
+CREATE DATABASE IF NOT EXISTS oficina;
+USE oficina;
+
+-- Tabela: Cliente
+-- Armazena os dados dos clientes da oficina.
+CREATE TABLE IF NOT EXISTS Cliente (
+    idCliente INT AUTO_INCREMENT PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL,
+    CPF CHAR(11) NOT NULL,
+    Telefone VARCHAR(15),
+    Endereco VARCHAR(255),
+    CONSTRAINT unique_cpf_cliente UNIQUE (CPF)
+);
+
+-- Tabela: Veiculo
+-- Armazena os dados dos veículos pertencentes aos clientes.
+-- Relaciona-se com Cliente (1:N).
+CREATE TABLE IF NOT EXISTS Veiculo (
+    idVeiculo INT AUTO_INCREMENT PRIMARY KEY,
+    idCliente INT,
+    Placa CHAR(7) NOT NULL,
+    Modelo VARCHAR(50) NOT NULL,
+    Marca VARCHAR(50),
+    Ano INT,
+    Cor VARCHAR(30),
+    CONSTRAINT unique_placa_veiculo UNIQUE (Placa),
+    CONSTRAINT fk_veiculo_cliente FOREIGN KEY (idCliente) REFERENCES Cliente(idCliente) ON DELETE CASCADE
+);
+
+-- Tabela: Equipe
+-- Armazena as equipes de mecânicos.
+CREATE TABLE IF NOT EXISTS Equipe (
+    idEquipe INT AUTO_INCREMENT PRIMARY KEY,
+    NomeEquipe VARCHAR(100) NOT NULL COMMENT 'Ex: Equipe A, Especialistas em Motor, etc.'
+);
+
+-- Tabela: Mecanico
+-- Armazena os dados dos mecânicos da oficina.
+CREATE TABLE IF NOT EXISTS Mecanico (
+    idMecanico INT AUTO_INCREMENT PRIMARY KEY,
+    NomeCompleto VARCHAR(100) NOT NULL,
+    CodigoMecanico VARCHAR(10) NOT NULL,
+    Endereco VARCHAR(255),
+    Especialidade VARCHAR(100) NOT NULL,
+    CONSTRAINT unique_codigo_mecanico UNIQUE (CodigoMecanico)
+);
+
+-- Tabela Associativa: Mecanico_Equipe
+-- Relaciona Mecânicos e Equipes (N:M).
+CREATE TABLE IF NOT EXISTS Mecanico_Equipe (
+    idMecanico INT,
+    idEquipe INT,
+    PRIMARY KEY (idMecanico, idEquipe),
+    CONSTRAINT fk_mecanico_equipe_mecanico FOREIGN KEY (idMecanico) REFERENCES Mecanico(idMecanico),
+    CONSTRAINT fk_mecanico_equipe_equipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe)
+);
+
+-- Tabela: OrdemServico (OS)
+-- A entidade central do processo, armazena os dados da Ordem de Serviço.
+CREATE TABLE IF NOT EXISTS OrdemServico (
+    idOS INT AUTO_INCREMENT PRIMARY KEY,
+    idVeiculo INT NOT NULL,
+    idEquipe INT NOT NULL,
+    NumeroOS VARCHAR(20) NOT NULL,
+    DataEmissao DATE NOT NULL,
+    DataConclusao DATE,
+    ValorTotal DECIMAL(10, 2) DEFAULT 0.00,
+    StatusOS ENUM('Aguardando Aprovação', 'Aprovada', 'Em Execução', 'Concluída', 'Cancelada') NOT NULL DEFAULT 'Aguardando Aprovação',
+    AutorizacaoCliente BOOLEAN DEFAULT FALSE,
+    CONSTRAINT unique_numero_os UNIQUE (NumeroOS),
+    CONSTRAINT fk_os_veiculo FOREIGN KEY (idVeiculo) REFERENCES Veiculo(idVeiculo),
+    CONSTRAINT fk_os_equipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe)
+);
+
+-- Tabela: Servico
+-- Tabela de referência para os tipos de serviços e seus valores de mão-de-obra.
+CREATE TABLE IF NOT EXISTS Servico (
+    idServico INT AUTO_INCREMENT PRIMARY KEY,
+    DescricaoServico VARCHAR(255) NOT NULL,
+    ValorMaoDeObra DECIMAL(10, 2) NOT NULL
+);
+
+-- Tabela: Peca
+-- Tabela de referência para as peças e seus valores unitários.
+CREATE TABLE IF NOT EXISTS Peca (
+    idPeca INT AUTO_INCREMENT PRIMARY KEY,
+    DescricaoPeca VARCHAR(255) NOT NULL,
+    ValorUnitario DECIMAL(10, 2) NOT NULL
+);
+
+-- Tabela Associativa: OS_Servicos
+-- Relaciona os serviços que compõem uma Ordem de Serviço (N:M).
+CREATE TABLE IF NOT EXISTS OS_Servicos (
+    idOS INT,
+    idServico INT,
+    PRIMARY KEY (idOS, idServico),
+    CONSTRAINT fk_os_servicos_os FOREIGN KEY (idOS) REFERENCES OrdemServico(idOS),
+    CONSTRAINT fk_os_servicos_servico FOREIGN KEY (idServico) REFERENCES Servico(idServico)
+);
+
+-- Tabela Associativa: OS_Pecas
+-- Relaciona as peças utilizadas em uma Ordem de Serviço (N:M).
+CREATE TABLE IF NOT EXISTS OS_Pecas (
+    idOS INT,
+    idPeca INT,
+    Quantidade INT NOT NULL DEFAULT 1,
+    PRIMARY KEY (idOS, idPeca),
+    CONSTRAINT fk_os_pecas_os FOREIGN KEY (idOS) REFERENCES OrdemServico(idOS),
+    CONSTRAINT fk_os_pecas_peca FOREIGN KEY (idPeca) REFERENCES Peca(idPeca)
+);
+
+-- Fim do Script
