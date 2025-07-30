@@ -11,7 +11,7 @@ Clientes levam veículos à oficina mecânica para serem consertados ou para pas
 # Descrição do Esquema Conceitual
 O esquema foi projetado para ser normalizado e relacional, garantindo a integridade e a consistência dos dados. As principais entidades são:
 
-Cliente: Armazena as informações dos proprietários dos veículos.
+* Cliente: Armazena as informações dos proprietários dos veículos.
 
 Veiculo: Contém os detalhes de cada veículo, com uma referência direta ao seu proprietário (Cliente).
 
@@ -23,7 +23,7 @@ OrdemServico: A tabela central que conecta Veiculo, Equipe e os detalhes do serv
 
 Servico e Peca: Tabelas de referência (lookup tables) que funcionam como um catálogo de serviços e peças com seus respectivos valores.
 
-#Tabelas Associativas:
+# Tabelas Associativas:
 
 Mecanico_Equipe: Permite um relacionamento N:M entre mecânicos e equipes.
 
