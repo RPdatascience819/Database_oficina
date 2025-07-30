@@ -25,19 +25,19 @@ O esquema foi projetado para ser normalizado e relacional, garantindo a integrid
 
 # Tabelas Associativas:
 
-Mecanico_Equipe: Permite um relacionamento N:M entre mecânicos e equipes.
+* Mecanico_Equipe: Permite um relacionamento N:M entre mecânicos e equipes.
 
-OS_Servicos: Liga uma Ordem de Serviço aos vários serviços que ela pode conter.
+* OS_Servicos: Liga uma Ordem de Serviço aos vários serviços que ela pode conter.
 
-OS_Pecas: Liga uma Ordem de Serviço às várias peças utilizadas, incluindo a quantidade.
+* OS_Pecas: Liga uma Ordem de Serviço às várias peças utilizadas, incluindo a quantidade.
 
 # Suposições e Decisões de Projeto
 Durante a modelagem, algumas decisões foram tomadas para complementar a narrativa:
 
-Identificadores Únicos: Foram adicionados campos de identificação única como CPF para Cliente, Placa para Veiculo e CodigoMecanico para Mecanico, para evitar duplicidade de registros.
+1. Identificadores Únicos: Foram adicionados campos de identificação única como CPF para Cliente, Placa para Veiculo e CodigoMecanico para Mecanico, para evitar duplicidade de registros.
 
-Status da OS: Foi utilizado um tipo ENUM para o campo StatusOS na tabela OrdemServico. Isso restringe os valores possíveis a um conjunto pré-definido ('Aguardando Aprovação', 'Aprovada', 'Em Execução', 'Concluída', 'Cancelada'), garantindo consistência.
+2. Status da OS: Foi utilizado um tipo ENUM para o campo StatusOS na tabela OrdemServico. Isso restringe os valores possíveis a um conjunto pré-definido ('Aguardando Aprovação', 'Aprovada', 'Em Execução', 'Concluída', 'Cancelada'), garantindo consistência.
 
-Autorização do Cliente: Foi incluído um campo booleano AutorizacaoCliente na OrdemServico para registrar explicitamente a aprovação do cliente, um passo crucial mencionado na narrativa.
+3. Autorização do Cliente: Foi incluído um campo booleano AutorizacaoCliente na OrdemServico para registrar explicitamente a aprovação do cliente, um passo crucial mencionado na narrativa.
 
-Relacionamento Mecânico-Equipe: Optei por uma relação N:M para oferecer mais flexibilidade ao sistema, permitindo que um mecânico possa ser associado a múltiplas equipes no futuro.
+4. Relacionamento Mecânico-Equipe: Optei por uma relação N:M para oferecer mais flexibilidade ao sistema, permitindo que um mecânico possa ser associado a múltiplas equipes no futuro.
